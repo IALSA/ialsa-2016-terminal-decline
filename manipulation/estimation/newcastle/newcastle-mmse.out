@@ -1,0 +1,1168 @@
+Mplus VERSION 7.3
+MUTHEN & MUTHEN
+12/09/2016   3:54 PM
+
+INPUT INSTRUCTIONS
+
+
+     TITLE:	Newcastle analysis 2 classes;
+    DATA:  FILE IS NewcastleTDclassesnn.txt;
+
+    VARIABLE: Names yrsedu alcweek soccl highBP bage
+     educc bagec ttd1 ttd2 ttd3 TD1c aged
+      agedc mmse1 mmse2 mmse3 female
+       everdem smoker cancer strk hfail diabet person highsoccl;
+
+
+
+      MISSING is all (-9999);
+        usevariables are female highsoccl
+                         dtimec1-dtimec3
+                   BPagec
+                          educ ytdeadc  y1-y3  dem;
+
+       TSCORES=dtimec1 dtimec2 dtimec3 ;
+
+       CLASSES=c(2);
+        DEFINE: BPagec=bage-85.4;
+                dtimec1=ttd1+2;
+                dtimec2=ttd2+2;
+                dtimec3=ttd3+2;
+
+                educ=educc;
+                ytdeadc=TD1c;
+
+
+      y1=mmse1;
+      y2=mmse2;
+      y3=mmse3;
+      smk=smoker;
+      dem=everdem;
+
+
+
+        ANALYSIS: type=mixture random ;
+                  estimator=MLF; Algorithm=integration; Mconvergence=0.09;
+                 MIterations=100;
+                    coverage=0.03;integration=montecarlo;
+               starts=500 30;LOGCRITERION=0.09;
+
+      MODEL: %OVERALL%
+
+          I S | y1-y3  AT dtimec1-dtimec3;
+        I  S ON  female  dem educ ytdeadc highsoccl BPagec;
+         !S@0; i with S@0;
+    c ON  educ female ytdeadc dem highsoccl BPagec;
+
+              educ;
+              BPagec;
+              ytdeadc;
+      %c#1%
+        I S ON  female  dem  educ ytdeadc highsoccl BPagec;
+
+      !S@0;
+              y1(1); y2(1); y3(1);
+
+
+      %c#2%
+        I  S ON female  dem educ ytdeadc highsoccl;
+
+             y1(2); y2(2); y3(2);
+
+
+
+
+
+
+        OUTPUT: sampstat tech1 ;
+        PLOT: Type is Plot1 Plot2 Plot3;
+      SAVEDATA: FILE IS "newcastle-mmse-results.txt";
+        SAVE=CPROBABILITIES; SAVE=FSCORES;
+
+
+
+*** WARNING in VARIABLE command
+  Note that only the first 8 characters of variable names are used in the output.
+  Shorten variable names to avoid any confusion.
+*** WARNING in PLOT command
+  Note that only the first 8 characters of variable names are used in plots.
+  If variable names are not unique within the first 8 characters, problems
+  may occur.
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  32
+   3 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Newcastle analysis 2 classes;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         398
+
+Number of dependent variables                                    3
+Number of independent variables                                  6
+Number of continuous latent variables                            2
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   Y1          Y2          Y3
+
+Observed independent variables
+   FEMALE      HIGHSOCC    BPAGEC      EDUC        YTDEADC     DEM
+
+Continuous latent variables
+   I           S
+
+Categorical latent variables
+   C
+
+Variables with special functions
+
+  Time scores
+   DTIMEC1     DTIMEC2     DTIMEC3
+
+
+Estimator                                                      MLF
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 100
+  Convergence criteria
+    Loglikelihood change                                 0.900D-01
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.900D-01
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                  MONTECARLO
+  Number of integration points                                 150
+  Dimensions of numerical integration                            3
+  Adaptive quadrature                                           ON
+  Monte Carlo integration seed                                   0
+Random Starts Specifications
+  Number of initial stage random starts                        500
+  Number of final stage optimizations                           30
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Cholesky                                                       OFF
+
+Input data file(s)
+  NewcastleTDclassesnn.txt
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            10
+     Number of y missing data patterns          10
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.030
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1             0.990
+ Y2             0.319         0.319
+ Y3             0.050         0.045         0.050
+ BPAGEC         0.892         0.312         0.048         0.892
+ EDUC           0.982         0.319         0.050         0.884         0.992
+ YTDEADC        0.990         0.319         0.050         0.892         0.992
+ FEMALE         0.990         0.319         0.050         0.892         0.992
+ HIGHSOCC       0.990         0.319         0.050         0.892         0.992
+ DEM            0.990         0.319         0.050         0.892         0.992
+
+
+           Covariance Coverage
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ YTDEADC        1.000
+ FEMALE         1.000         1.000
+ HIGHSOCC       1.000         1.000         1.000
+ DEM            1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+     NO CONVERGENCE IN THE MISSING DATA ESTIMATION OF THE SAMPLE STATISTICS.
+
+
+UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     Y1                   24.873      -1.943       0.000    0.76%      22.000     26.000     27.000
+             394.000      34.365       3.946      30.000   13.20%      28.000     29.000
+     Y2                   23.362      -1.365       2.000    0.79%      18.000     24.000     26.000
+             127.000      46.562       1.057      30.000   10.24%      27.000     29.000
+     Y3                   22.500      -1.425       1.000    5.00%      17.000     23.000     26.500
+              20.000      61.850       1.033      30.000    5.00%      27.000     28.000
+     BPAGEC                0.061       0.230      -0.933    0.28%      -0.323     -0.063      0.036
+             355.000       0.180      -0.435       1.153    0.28%       0.132      0.433
+     EDUC                 -0.052       2.471      -3.910    0.51%      -0.910     -0.910     -0.910
+             395.000       3.438       7.456      10.090    0.25%      -0.910      1.090
+     YTDEADC              -0.049      -0.108      -3.309    0.25%      -1.694     -0.525      0.003
+             398.000       2.489      -1.124       2.602    0.25%       0.463      1.600
+     FEMALE                0.545      -0.182       0.000   45.48%       0.000      0.000      1.000
+             398.000       0.248      -1.967       1.000   54.52%       1.000      1.000
+     HIGHSOCCL             0.422       0.315       0.000   57.79%       0.000      0.000      0.000
+             398.000       0.244      -1.901       1.000   42.21%       1.000      1.000
+     DEM                   0.123       2.294       0.000   87.69%       0.000      0.000      0.000
+             398.000       0.108       3.263       1.000   12.31%       0.000      0.000
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+31 perturbed starting value run(s) did not converge in the initial stage
+optimizations.
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -3189.150  863094           147
+           -3189.220  618000           190
+           -3189.382  441191           361
+           -3189.408  127215           9
+           -3189.902  178475           231
+           -3190.641  193847           354
+           -3190.699  358488           264
+           -3190.765  830529           279
+           -3191.292  170954           86
+           -3191.658  783110           72
+           -3191.928  153394           429
+           -3192.218  644297           340
+           -3192.229  392751           480
+           -3192.477  505879           424
+           -3192.758  315029           471
+           -3193.264  57226            208
+           -3193.442  614009           317
+           -3193.794  965994           396
+           -3197.695  595153           230
+           -3198.071  545140           278
+           -3198.104  614535           449
+           -3198.829  36714            201
+           -3200.099  642909           251
+           -3203.313  596257           405
+           -3215.161  679832           302
+           -3220.014  582296           452
+           -3223.020  784664           75
+           -3227.101  830570           369
+           -3235.254  286735           175
+           -3270.130  765392           382
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE MISSING DATA EM ALGORITHM USED TO COMPUTE SAMPLE STATISTICS HAS NOT
+     CONVERGED WITH RESPECT TO THE PARAMETER ESTIMATES.  THIS MAY BE DUE TO
+     SPARSE DATA LEADING TO A SINGULAR COVARIANCE MATRIX ESTIMATE.  INCREASE
+     THE NUMBER OF EM ITERATIONS.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       49
+
+Loglikelihood
+
+          H0 Value                       -3189.150
+
+Information Criteria
+
+          Akaike (AIC)                    6476.299
+          Bayesian (BIC)                  6671.636
+          Sample-Size Adjusted BIC        6516.157
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        114.64602          0.28806
+       2        283.35398          0.71194
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        114.79031          0.28842
+       2        283.20969          0.71158
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              105          0.26382
+       2              293          0.73618
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.779
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2
+
+    1   0.940    0.060
+    2   0.055    0.945
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2
+
+    1   0.859    0.141
+    2   0.022    0.978
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2
+
+    1      1.810    0.000
+    2     -3.775    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ I          ON
+    FEMALE            -2.414      1.353     -1.784      0.074
+    DEM               -6.009      1.789     -3.358      0.001
+    EDUC              -0.035      0.601     -0.058      0.953
+    YTDEADC            2.465      0.624      3.949      0.000
+    HIGHSOCCL          2.400      1.325      1.811      0.070
+    BPAGEC            -1.406      1.518     -0.927      0.354
+
+ S          ON
+    FEMALE             0.139      1.149      0.121      0.904
+    DEM               -1.376      0.917     -1.500      0.134
+    EDUC              -0.118      0.338     -0.350      0.727
+    YTDEADC           -0.652      0.295     -2.210      0.027
+    HIGHSOCCL         -0.177      0.803     -0.220      0.826
+    BPAGEC            -0.314      0.882     -0.356      0.722
+
+ S        WITH
+    I                  0.691      0.311      2.225      0.026
+
+ EDUC     WITH
+    BPAGEC            -0.066      0.055     -1.203      0.229
+
+ YTDEADC  WITH
+    BPAGEC             0.002      0.039      0.047      0.962
+    EDUC              -0.275      0.159     -1.736      0.082
+
+ Means
+    BPAGEC             0.063      0.025      2.542      0.011
+    EDUC              -0.052      0.165     -0.313      0.754
+    YTDEADC           -0.049      0.086     -0.572      0.568
+
+ Intercepts
+    Y1                 0.000      0.000    999.000    999.000
+    Y2                 0.000      0.000    999.000    999.000
+    Y3                 0.000      0.000    999.000    999.000
+    I                 17.927      1.221     14.684      0.000
+    S                 -5.336      1.217     -4.384      0.000
+
+ Variances
+    BPAGEC             0.180      0.017     10.588      0.000
+    EDUC               3.434      0.207     16.566      0.000
+    YTDEADC            2.489      0.309      8.047      0.000
+
+ Residual Variances
+    Y1                21.520      4.003      5.376      0.000
+    Y2                21.520      4.003      5.376      0.000
+    Y3                21.520      4.003      5.376      0.000
+    I                  3.562      0.753      4.729      0.000
+    S                  0.266      0.220      1.211      0.226
+
+Latent Class 2
+
+ I          ON
+    FEMALE            -0.086      0.345     -0.250      0.802
+    DEM               -3.639      0.801     -4.543      0.000
+    EDUC               0.279      0.128      2.180      0.029
+    YTDEADC            0.513      0.134      3.840      0.000
+    HIGHSOCCL         -0.284      0.377     -0.755      0.450
+    BPAGEC            -0.268      0.432     -0.621      0.535
+
+ S          ON
+    FEMALE            -0.258      0.201     -1.284      0.199
+    DEM               -0.250      0.428     -0.584      0.559
+    EDUC               0.068      0.071      0.959      0.338
+    YTDEADC           -0.137      0.077     -1.774      0.076
+    HIGHSOCCL         -0.312      0.222     -1.406      0.160
+    BPAGEC             0.106      0.236      0.451      0.652
+
+ S        WITH
+    I                  0.691      0.311      2.225      0.026
+
+ EDUC     WITH
+    BPAGEC            -0.066      0.055     -1.203      0.229
+
+ YTDEADC  WITH
+    BPAGEC             0.002      0.039      0.047      0.962
+    EDUC              -0.275      0.159     -1.736      0.082
+
+ Means
+    BPAGEC             0.063      0.025      2.542      0.011
+    EDUC              -0.052      0.165     -0.313      0.754
+    YTDEADC           -0.049      0.086     -0.572      0.568
+
+ Intercepts
+    Y1                 0.000      0.000    999.000    999.000
+    Y2                 0.000      0.000    999.000    999.000
+    Y3                 0.000      0.000    999.000    999.000
+    I                 27.437      0.333     82.473      0.000
+    S                 -0.700      0.219     -3.197      0.001
+
+ Variances
+    BPAGEC             0.180      0.017     10.588      0.000
+    EDUC               3.434      0.207     16.566      0.000
+    YTDEADC            2.489      0.309      8.047      0.000
+
+ Residual Variances
+    Y1                 1.545      0.388      3.977      0.000
+    Y2                 1.545      0.388      3.977      0.000
+    Y3                 1.545      0.388      3.977      0.000
+    I                  3.562      0.753      4.729      0.000
+    S                  0.266      0.220      1.211      0.226
+
+Categorical Latent Variables
+
+ C#1        ON
+    EDUC               0.072      0.091      0.787      0.431
+    FEMALE             0.080      0.327      0.245      0.806
+    YTDEADC           -0.126      0.113     -1.109      0.268
+    DEM                2.238      0.493      4.538      0.000
+    HIGHSOCCL         -0.524      0.389     -1.347      0.178
+    BPAGEC             0.033      0.456      0.072      0.942
+
+ Intercepts
+    C#1               -1.081      0.312     -3.461      0.001
+
+
+LOGISTIC REGRESSION ODDS RATIO RESULTS
+
+Categorical Latent Variables
+
+ C#1      ON
+    EDUC               1.074
+    FEMALE             1.083
+    YTDEADC            0.882
+    DEM                9.370
+    HIGHSOCCL          0.592
+    BPAGEC             1.034
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.266E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 1
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1                 0             0             0             0             0
+ Y2                 0             0             0             0             0
+ Y3                 0             0             0             0             0
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           LAMBDA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ Y1                 0             0             0
+ Y2                 0             0             0
+ Y3                 0             0             0
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1                 1
+ Y2                 0             1
+ Y3                 0             0             1
+ BPAGEC             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           THETA
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ YTDEADC            0
+ FEMALE             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0             0
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1                  2             3             4             5             6
+
+
+           ALPHA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ 1                  0             0             0
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                  0             0             7             8             9
+ S                  0             0            13            14            15
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           BETA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ I                 10            11            12
+ S                 16            17            18
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                 19
+ S                 20            21
+ BPAGEC             0             0            22
+ EDUC               0             0            23            24
+ YTDEADC            0             0            25            26            27
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           PSI
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ FEMALE             0
+ HIGHSOCC           0             0
+ DEM                0             0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 2
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1                 0             0             0             0             0
+ Y2                 0             0             0             0             0
+ Y3                 0             0             0             0             0
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           LAMBDA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ Y1                 0             0             0
+ Y2                 0             0             0
+ Y3                 0             0             0
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1                28
+ Y2                 0            28
+ Y3                 0             0            28
+ BPAGEC             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           THETA
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ YTDEADC            0
+ FEMALE             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0             0
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1                 29            30             4             5             6
+
+
+           ALPHA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ 1                  0             0             0
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                  0             0            31            32            33
+ S                  0             0            37            38            39
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           BETA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ I                 34            35            36
+ S                 40            41            42
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ HIGHSOCC           0             0             0
+ DEM                0             0             0
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                 19
+ S                 20            21
+ BPAGEC             0             0            22
+ EDUC               0             0            23            24
+ YTDEADC            0             0            25            26            27
+ FEMALE             0             0             0             0             0
+ HIGHSOCC           0             0             0             0             0
+ DEM                0             0             0             0             0
+
+
+           PSI
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ FEMALE             0
+ HIGHSOCC           0             0
+ DEM                0             0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2
+              ________      ________
+ 1                 43             0
+
+
+           GAMMA(C)
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ C#1                0             0            44            45            46
+ C#2                0             0             0             0             0
+
+
+           GAMMA(C)
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ C#1               47            48            49
+ C#2                0             0             0
+
+
+     STARTING VALUES FOR LATENT CLASS 1
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1             0.000         0.000         0.000         0.000         0.000
+ Y2             0.000         0.000         0.000         0.000         0.000
+ Y3             0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         1.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         1.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         1.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ Y1             0.000         0.000         0.000
+ Y2             0.000         0.000         0.000
+ Y3             0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         1.000         0.000         0.000
+ HIGHSOCC       0.000         1.000         0.000
+ DEM            0.000         0.000         1.000
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1            17.182
+ Y2             0.000        23.281
+ Y3             0.000         0.000        30.925
+ BPAGEC         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ YTDEADC        0.000
+ FEMALE         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1             21.564        -3.140         0.061        -0.052        -0.049
+
+
+           ALPHA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ 1              0.000         0.000         0.000
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I              0.000         0.000         0.000         0.000         0.000
+ S              0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ I              0.000         0.000         0.000
+ S              0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000
+ DEM            0.000         0.000         0.000
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I             45.661
+ S              0.000        15.821
+ BPAGEC         0.000         0.000         0.090
+ EDUC           0.000         0.000         0.000         1.719
+ YTDEADC        0.000         0.000         0.000         0.000         1.245
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ FEMALE         0.124
+ HIGHSOCC       0.000         0.122
+ DEM            0.000         0.000         0.054
+
+
+     STARTING VALUES FOR LATENT CLASS 2
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1             0.000         0.000         0.000         0.000         0.000
+ Y2             0.000         0.000         0.000         0.000         0.000
+ Y3             0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         1.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         1.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         1.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ Y1             0.000         0.000         0.000
+ Y2             0.000         0.000         0.000
+ Y3             0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         1.000         0.000         0.000
+ HIGHSOCC       0.000         1.000         0.000
+ DEM            0.000         0.000         1.000
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1            17.182
+ Y2             0.000        23.281
+ Y3             0.000         0.000        30.925
+ BPAGEC         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              YTDEADC       FEMALE        HIGHSOCC      DEM
+              ________      ________      ________      ________
+ YTDEADC        0.000
+ FEMALE         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1             21.564        -3.140         0.061        -0.052        -0.049
+
+
+           ALPHA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ 1              0.000         0.000         0.000
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I              0.000         0.000         0.000         0.000         0.000
+ S              0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ I              0.000         0.000         0.000
+ S              0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000
+ DEM            0.000         0.000         0.000
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I             45.661
+ S              0.000        15.821
+ BPAGEC         0.000         0.000         0.090
+ EDUC           0.000         0.000         0.000         1.719
+ YTDEADC        0.000         0.000         0.000         0.000         1.245
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ HIGHSOCC       0.000         0.000         0.000         0.000         0.000
+ DEM            0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ FEMALE         0.124
+ HIGHSOCC       0.000         0.122
+ DEM            0.000         0.000         0.054
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2
+              ________      ________
+ 1              0.000         0.000
+
+
+           GAMMA(C)
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ C#1            0.000         0.000         0.000         0.000         0.000
+ C#2            0.000         0.000         0.000         0.000         0.000
+
+
+           GAMMA(C)
+              FEMALE        HIGHSOCC      DEM
+              ________      ________      ________
+ C#1            0.000         0.000         0.000
+ C#2            0.000         0.000         0.000
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ 1             23.545        -2.324        23.710        -2.224
+
+
+           Covariances
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ I             37.055
+ S              9.942         4.265
+ C_I           38.066        10.297        40.145
+ C_S           10.398         4.444        11.157         4.836
+
+
+           Correlations
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ I              1.000
+ S              0.791         1.000
+ C_I            0.987         0.787         1.000
+ C_S            0.777         0.978         0.801         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores)
+  Scatterplots (sample values, estimated factor scores)
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    newcastle-mmse-results.txt
+
+  Order and format of variables
+
+    Y1             F10.3
+    Y2             F10.3
+    Y3             F10.3
+    BPAGEC         F10.3
+    EDUC           F10.3
+    YTDEADC        F10.3
+    FEMALE         F10.3
+    HIGHSOCC       F10.3
+    DEM            F10.3
+    DTIMEC1        F10.3
+    DTIMEC2        F10.3
+    DTIMEC3        F10.3
+    I              F10.3
+    S              F10.3
+    C_I            F10.3
+    C_S            F10.3
+    CPROB1         F10.3
+    CPROB2         F10.3
+    C              F10.3
+
+  Save file format
+    19F10.3
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  15:54:08
+        Ending Time:  16:26:26
+       Elapsed Time:  00:32:18
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2014 Muthen & Muthen

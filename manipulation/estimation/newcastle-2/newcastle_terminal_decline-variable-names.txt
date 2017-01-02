@@ -1,0 +1,13 @@
+id
+female
+Demever
+SESgrp
+yrsedu
+ytdead
+bage
+ttd1
+ttd2
+ttd3
+mmse1
+mmse2
+mmse3

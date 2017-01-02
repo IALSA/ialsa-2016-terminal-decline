@@ -1,0 +1,85 @@
+! this estimation script used the data prepared by
+! ./manipulaton/0-ellis-island-newcastle.R
+
+TITLE:	Newcastle analysis 2 classes;
+DATA:  FILE IS newcastle_terminal_decline.dat;
+
+VARIABLE: Names are
+	id
+	female
+	Demever
+	SESgrp
+	yrsedu
+	ytdead
+	bage
+	ttd1
+	ttd2
+	ttd3
+	mmse1
+	mmse2
+	mmse3
+;
+
+MISSING is all (-9999);
+
+USEVARIABLES ARE
+! variables used as is
+	female SESgrp Demever 
+! variables transformed in the DEFINE statement	 
+	BPagec
+	educ 
+	ytdeadc 
+	dtimec1-dtimec3 		 
+	y1-y3  ;
+
+TSCORES=dtimec1 dtimec2 dtimec3 ;
+
+CLASSES=c(2);
+DEFINE: 
+	BPagec  = bage   - 85;
+	educ    = yrsedu - 7;
+	ytdeadc = ytdead + 6;
+	dtimec1 = ttd1   + 2;
+	dtimec2 = ttd2   + 2;
+	dtimec3 = ttd3   + 2;
+	y1      = mmse1;
+	y2      = mmse2;
+	y3      = mmse3;
+
+ANALYSIS: 
+	type           = mixture random ;
+	estimator      = MLF; 
+	Algorithm      = integration; 
+	integration    = montecarlo;
+	Mconvergence   = 0.09;
+	MIterations    = 100;
+	coverage       = 0.03;
+	starts         = 500 30;
+	!Integration     = 300; # used in OCTO
+	LOGCRITERION   = 0.09;
+
+MODEL: %OVERALL%
+
+	I S |  y1-y3  AT dtimec1-dtimec3;
+	I S ON BPagec educ ytdeadc female  Demever SESgrp;
+	c   ON BPagec educ ytdeadc female  Demever SESgrp;
+		educ; 
+		BPagec; 
+		ytdeadc;
+		
+    %c#1%
+    I S ON BPagec educ ytdeadc female  Demever SESgrp;
+		y1(1);
+		y2(1);
+		y3(1);
+
+    %c#2%
+    I S ON BPagec educ ytdeadc female  Demever SESgrp;
+		y1(2);
+		y2(2);
+		y3(2);
+
+OUTPUT: sampstat tech1 ;
+PLOT: Type is Plot1 Plot2 Plot3;
+SAVEDATA: FILE IS "newcastle-mmse-k-2.txt";
+SAVE=CPROBABILITIES; SAVE=FSCORES;

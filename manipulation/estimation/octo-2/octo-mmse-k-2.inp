@@ -1,0 +1,103 @@
+! this estimation script used the data prepared by
+! ./manipulaton/0-ellis-island-octo.R
+
+TITLE:	OctoTwin multivariate file;
+DATA:  FILE IS octo_terminal_decline.dat;
+
+VARIABLE: Names are
+	Case
+	PairID
+	female
+	Demever
+	SESgrp
+	yrsedu
+	ytdead
+	dead
+	tvdem1
+	bage
+	dedtime1
+	dedtime2
+	dedtime3
+	dedtime4
+	dedtime5
+	mmse1
+	mmse2
+	mmse3
+	mmse4
+	mmse5
+;
+
+MISSING is all (-9999);
+USEVARIABLES ARE
+! variables used as is
+	female SESgrp Demever 
+! variables transformed in the DEFINE statement	 
+	BPagec
+	educ 
+	ytdeadc 
+	dtimec1-dtimec5 		 
+	y1-y5  ;
+	
+SUBPOPULATION are (dead EQ 1) AND (tvdem1 EQ 0);! (YTDead GE -11);
+MISSING ARE .;
+
+TSCORES = dtimec1 dtimec2 dtimec3 dtimec4 dtimec5;
+
+CLUSTER = PairID;
+CLASSES = c(2);
+DEFINE: 
+	BPagec  = bage     - 85;
+	educ    = yrsedu   - 7;
+	ytdeadc = ytdead   + 6;
+	dtimec1 = dedtime1 + 2;
+	dtimec2 = dedtime2 + 2;
+	dtimec3 = dedtime3 + 2;
+	dtimec4 = dedtime4 + 2;
+	dtimec5 = dedtime5 + 2;
+	y1      = mmse1;
+	y2      = mmse2;
+	y3      = mmse3;
+	y4      = mmse4;
+	y5      = mmse5;
+
+ANALYSIS: 
+	type            = mixture random complex;
+	estimator       = MLR;
+	Algorithm       = Integration;
+	integration     = montecarlo;
+	Mconvergence    = 0.09;
+	!MIterations    = 100; !used in Newcastle
+	coverage        = 0.03;
+	starts          = 200 30;
+	Integration     = 300;
+	!LOGCRITERION    = 0.09; ! used in Newcastle
+
+MODEL: %OVERALL%
+
+	I S Q |  y1-y5  AT dtimec1-dtimec5;
+	I S Q ON BPagec educ ytdeadc female  Demever SESgrp;
+	c   ON BPagec educ ytdeadc female  Demever SESgrp;
+		educ; 
+		BPagec; 
+		ytdeadc;
+		
+    %c#1%
+    I S Q ON BPagec educ ytdeadc female  Demever SESgrp;
+		y1(1);
+		y2(1);
+		y3(1);
+		y4(1);
+		y5(1);
+
+    %c#2%
+    I S Q ON BPagec educ ytdeadc female  Demever SESgrp;
+		y1(2);
+		y2(2);
+		y3(2);
+		y4(2);
+		y5(2);
+
+OUTPUT: sampstat tech1 ;
+PLOT: Type is Plot1 Plot2 Plot3;
+SAVEDATA: FILE IS "octo-mmse-k-2.txt";
+SAVE=CPROBABILITIES; SAVE=FSCORES;

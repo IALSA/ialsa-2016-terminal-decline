@@ -1,0 +1,74 @@
+
+   TITLE:	Newcastle analysis 2 classes;
+  DATA:  FILE IS NewcastleTDclassesnn.txt;
+
+  VARIABLE: Names yrsedu alcweek soccl highBP bage
+   educc bagec ttd1 ttd2 ttd3 TD1c aged
+    agedc mmse1 mmse2 mmse3 female
+     everdem smoker cancer strk hfail diabet person highsoccl;
+
+
+
+    MISSING is all (-9999);
+      usevariables are female highsoccl
+                       dtimec1-dtimec3 
+                 BPagec
+                        educ ytdeadc  y1-y3  dem;
+
+     TSCORES=dtimec1 dtimec2 dtimec3 ;
+
+     CLASSES=c(2);
+      DEFINE: BPagec=bage-85.4;
+              dtimec1=ttd1+2;
+              dtimec2=ttd2+2;
+              dtimec3=ttd3+2;
+
+              educ=educc;
+              ytdeadc=TD1c;
+
+
+    y1=mmse1;
+    y2=mmse2;
+    y3=mmse3;
+    smk=smoker;
+    dem=everdem;
+
+
+
+      ANALYSIS: type=mixture random ;
+                estimator=MLF; Algorithm=integration; Mconvergence=0.09;
+               MIterations=100;
+                  coverage=0.03;integration=montecarlo;
+             starts=500 30;LOGCRITERION=0.09;
+
+    MODEL: %OVERALL%
+
+        I S | y1-y3  AT dtimec1-dtimec3;
+      I  S ON  female  dem educ ytdeadc highsoccl BPagec;
+       !S@0; i with S@0;
+  c ON  educ female ytdeadc dem highsoccl BPagec;
+
+            educ; 
+            BPagec; 
+            ytdeadc;
+    %c#1%
+      I S ON  female  dem  educ ytdeadc highsoccl BPagec;
+
+    !S@0;
+            y1(1); y2(1); y3(1);
+
+
+    %c#2%
+      I  S ON female  dem educ ytdeadc highsoccl;
+
+           y1(2); y2(2); y3(2);
+
+
+     
+
+
+
+      OUTPUT: sampstat tech1 ;
+      PLOT: Type is Plot1 Plot2 Plot3;
+    SAVEDATA: FILE IS "newcastle-mmse-results.txt";
+      SAVE=CPROBABILITIES; SAVE=FSCORES;

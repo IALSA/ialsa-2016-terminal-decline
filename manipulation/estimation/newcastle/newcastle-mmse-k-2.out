@@ -1,0 +1,1170 @@
+Mplus VERSION 7.3
+MUTHEN & MUTHEN
+12/11/2016   3:07 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE:	Newcastle analysis 2 classes;
+  DATA:  FILE IS newcastle_terminal_decline.dat;
+
+  VARIABLE: Names are
+  	id
+  	female
+  	Demever
+  	SESgrp
+  	yrsedu
+  	ytdead
+  	bage
+  	ttd1
+  	ttd2
+  	ttd3
+  	mmse1
+  	mmse2
+  	mmse3
+  ;
+
+  MISSING is all (-9999);
+
+  USEVARIABLES ARE
+  ! variables used as is
+  	female SESgrp Demever
+  ! variables transformed in the DEFINE statement	
+  	BPagec
+  	educ
+  	ytdeadc
+  	dtimec1-dtimec3 		
+  	y1-y3  ;
+
+  TSCORES=dtimec1 dtimec2 dtimec3 ;
+
+  CLASSES=c(2);
+  DEFINE:
+  	BPagec  = bage   - 85;
+  	educ    = yrsedu - 7;
+  	ytdeadc = ytdead + 6;
+  	dtimec1 = ttd1   + 0;
+  	dtimec2 = ttd2   + 0;
+  	dtimec3 = ttd3   + 0;
+  	y1      = mmse1;
+  	y2      = mmse2;
+  	y3      = mmse3;
+
+  ANALYSIS:
+  	type           = mixture random ;
+  	estimator      = MLF;
+  	Algorithm      = integration;
+  	integration    = montecarlo;
+  	Mconvergence   = 0.09;
+  	MIterations    = 100;
+  	coverage       = 0.03;
+  	starts         = 500 30;
+  	!Integration     = 300; # used in OCTO
+  	LOGCRITERION   = 0.09;
+
+  MODEL: %OVERALL%
+
+  	I S |  y1-y3  AT dtimec1-dtimec3;
+  	I S ON BPagec educ ytdeadc female  Demever SESgrp;
+  	c   ON BPagec educ ytdeadc female  Demever SESgrp;
+  		educ;
+  		BPagec;
+  		ytdeadc;
+  		
+      %c#1%
+      I S ON BPagec educ ytdeadc female  Demever SESgrp;
+  		y1(1);
+  		y2(1);
+  		y3(1);
+
+      %c#2%
+      I S ON BPagec educ ytdeadc female  Demever SESgrp;
+  		y1(2);
+  		y2(2);
+  		y3(2);
+
+  OUTPUT: sampstat tech1 ;
+  PLOT: Type is Plot1 Plot2 Plot3;
+  SAVEDATA: FILE IS "newcastle-mmse-k-2.txt";
+  SAVE=CPROBABILITIES; SAVE=FSCORES;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  32
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Newcastle analysis 2 classes;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         398
+
+Number of dependent variables                                    3
+Number of independent variables                                  6
+Number of continuous latent variables                            2
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   Y1          Y2          Y3
+
+Observed independent variables
+   FEMALE      SESGRP      DEMEVER     BPAGEC      EDUC        YTDEADC
+
+Continuous latent variables
+   I           S
+
+Categorical latent variables
+   C
+
+Variables with special functions
+
+  Time scores
+   DTIMEC1     DTIMEC2     DTIMEC3
+
+
+Estimator                                                      MLF
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 100
+  Convergence criteria
+    Loglikelihood change                                 0.900D-01
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.900D-01
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                  MONTECARLO
+  Number of integration points                                 150
+  Dimensions of numerical integration                            3
+  Adaptive quadrature                                           ON
+  Monte Carlo integration seed                                   0
+Random Starts Specifications
+  Number of initial stage random starts                        500
+  Number of final stage optimizations                           30
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Cholesky                                                       OFF
+
+Input data file(s)
+  newcastle_terminal_decline.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            10
+     Number of y missing data patterns          10
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.030
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1             0.990
+ Y2             0.319         0.319
+ Y3             0.050         0.045         0.050
+ BPAGEC         0.892         0.312         0.048         0.892
+ EDUC           0.982         0.319         0.050         0.884         0.992
+ YTDEADC        0.990         0.319         0.050         0.892         0.992
+ FEMALE         0.990         0.319         0.050         0.892         0.992
+ SESGRP         0.990         0.319         0.050         0.892         0.992
+ DEMEVER        0.990         0.319         0.050         0.892         0.992
+
+
+           Covariance Coverage
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ YTDEADC        1.000
+ FEMALE         1.000         1.000
+ SESGRP         1.000         1.000         1.000
+ DEMEVER        1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+     NO CONVERGENCE IN THE MISSING DATA ESTIMATION OF THE SAMPLE STATISTICS.
+
+
+UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     Y1                   24.873      -1.943       0.000    0.76%      22.000     26.000     27.000
+             394.000      34.365       3.946      30.000   13.20%      28.000     29.000
+     Y2                   23.362      -1.365       2.000    0.79%      18.000     24.000     26.000
+             127.000      46.562       1.057      30.000   10.24%      27.000     29.000
+     Y3                   22.500      -1.425       1.000    5.00%      17.000     23.000     26.500
+              20.000      61.850       1.033      30.000    5.00%      27.000     28.000
+     BPAGEC                0.461       0.230      -0.533    0.28%       0.077      0.337      0.436
+             355.000       0.180      -0.435       1.553    0.28%       0.532      0.833
+     EDUC                  2.858       2.471      -1.000    0.51%       2.000      2.000      2.000
+             395.000       3.438       7.456      13.000    0.25%       2.000      4.000
+     YTDEADC               3.241      -0.108      -0.019    0.25%       1.596      2.765      3.293
+             398.000       2.489      -1.124       5.892    0.25%       3.753      4.890
+     FEMALE                0.545      -0.182       0.000   45.48%       0.000      0.000      1.000
+             398.000       0.248      -1.967       1.000   54.52%       1.000      1.000
+     SESGRP                0.422       0.315       0.000   57.79%       0.000      0.000      0.000
+             398.000       0.244      -1.901       1.000   42.21%       1.000      1.000
+     DEMEVER               0.123       2.294       0.000   87.69%       0.000      0.000      0.000
+             398.000       0.108       3.263       1.000   12.31%       0.000      0.000
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+110 perturbed starting value run(s) did not converge in the initial stage
+optimizations.
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -3190.569  570908           98
+           -3190.768  741484           441
+           -3190.980  580405           286
+           -3190.999  197223           332
+           -3192.057  496710           386
+           -3192.629  900268           327
+           -3193.606  573096           20
+           -3194.172  335485           496
+           -3196.309  926283           269
+           -3196.553  992389           77
+           -3198.275  340112           126
+           -3199.224  717754           180
+           -3201.655  879211           453
+           -3201.665  168762           200
+           -3202.902  436460           89
+           -3204.494  57226            208
+           -3213.855  193569           440
+           -3214.645  751054           117
+           -3215.785  399508           415
+           -3216.130  879338           309
+           -3226.475  972873           157
+           -3252.972  462228           298
+           -3256.019  871722           355
+           -3259.345  701525           239
+           -3261.750  529496           343
+           -3283.698  226322           478
+           -3290.573  788796           145
+           -3308.027  923437           398
+           -3320.610  875667           367
+           -3336.649  124999           96
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE MISSING DATA EM ALGORITHM USED TO COMPUTE SAMPLE STATISTICS HAS NOT
+     CONVERGED WITH RESPECT TO THE PARAMETER ESTIMATES.  THIS MAY BE DUE TO
+     SPARSE DATA LEADING TO A SINGULAR COVARIANCE MATRIX ESTIMATE.  INCREASE
+     THE NUMBER OF EM ITERATIONS.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       49
+
+Loglikelihood
+
+          H0 Value                       -3190.569
+
+Information Criteria
+
+          Akaike (AIC)                    6479.139
+          Bayesian (BIC)                  6674.475
+          Sample-Size Adjusted BIC        6518.996
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        107.92935          0.27118
+       2        290.07065          0.72882
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        107.98423          0.27132
+       2        290.01577          0.72868
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1               98          0.24623
+       2              300          0.75377
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.801
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2
+
+    1   0.948    0.052
+    2   0.050    0.950
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2
+
+    1   0.860    0.140
+    2   0.018    0.982
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2
+
+    1      1.815    0.000
+    2     -4.015    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ I          ON
+    BPAGEC            -0.472      2.974     -0.159      0.874
+    EDUC              -0.585      1.181     -0.495      0.620
+    YTDEADC            1.151      0.917      1.255      0.209
+    FEMALE            -1.580      3.142     -0.503      0.615
+    DEMEVER           -7.584      3.143     -2.413      0.016
+    SESGRP             0.865      2.503      0.346      0.730
+
+ S          ON
+    BPAGEC             0.409      1.005      0.407      0.684
+    EDUC              -0.253      0.328     -0.770      0.442
+    YTDEADC           -0.934      0.298     -3.134      0.002
+    FEMALE             0.160      1.142      0.140      0.888
+    DEMEVER           -1.152      0.872     -1.320      0.187
+    SESGRP            -0.430      0.844     -0.510      0.610
+
+ S        WITH
+    I                  1.278      0.731      1.748      0.080
+
+ EDUC     WITH
+    BPAGEC            -0.069      0.055     -1.246      0.213
+
+ YTDEADC  WITH
+    BPAGEC             0.000      0.040     -0.005      0.996
+    EDUC              -0.275      0.163     -1.683      0.092
+
+ Means
+    BPAGEC             0.463      0.025     18.710      0.000
+    EDUC               2.859      0.168     17.070      0.000
+    YTDEADC            3.241      0.085     38.153      0.000
+
+ Intercepts
+    Y1                 0.000      0.000    999.000    999.000
+    Y2                 0.000      0.000    999.000    999.000
+    Y3                 0.000      0.000    999.000    999.000
+    I                  2.993      5.738      0.521      0.602
+    S                 -2.691      1.728     -1.557      0.119
+
+ Variances
+    BPAGEC             0.180      0.017     10.544      0.000
+    EDUC               3.433      0.212     16.199      0.000
+    YTDEADC            2.489      0.303      8.211      0.000
+
+ Residual Variances
+    Y1                20.754      3.761      5.518      0.000
+    Y2                20.754      3.761      5.518      0.000
+    Y3                20.754      3.761      5.518      0.000
+    I                  7.875      2.677      2.941      0.003
+    S                  0.266      0.217      1.223      0.221
+
+Latent Class 2
+
+ I          ON
+    BPAGEC            -0.291      0.832     -0.350      0.726
+    EDUC               0.375      0.252      1.491      0.136
+    YTDEADC            0.341      0.203      1.678      0.093
+    FEMALE            -0.393      0.652     -0.602      0.547
+    DEMEVER           -4.325      1.452     -2.979      0.003
+    SESGRP            -0.964      0.694     -1.390      0.165
+
+ S          ON
+    BPAGEC             0.054      0.240      0.226      0.821
+    EDUC               0.056      0.075      0.747      0.455
+    YTDEADC            0.069      0.078      0.885      0.376
+    FEMALE            -0.209      0.203     -1.030      0.303
+    DEMEVER           -0.356      0.428     -0.833      0.405
+    SESGRP            -0.290      0.224     -1.298      0.194
+
+ S        WITH
+    I                  1.278      0.731      1.748      0.080
+
+ EDUC     WITH
+    BPAGEC            -0.069      0.055     -1.246      0.213
+
+ YTDEADC  WITH
+    BPAGEC             0.000      0.040     -0.005      0.996
+    EDUC              -0.275      0.163     -1.683      0.092
+
+ Means
+    BPAGEC             0.463      0.025     18.710      0.000
+    EDUC               2.859      0.168     17.070      0.000
+    YTDEADC            3.241      0.085     38.153      0.000
+
+ Intercepts
+    Y1                 0.000      0.000    999.000    999.000
+    Y2                 0.000      0.000    999.000    999.000
+    Y3                 0.000      0.000    999.000    999.000
+    I                 24.769      1.160     21.359      0.000
+    S                 -0.563      0.338     -1.664      0.096
+
+ Variances
+    BPAGEC             0.180      0.017     10.544      0.000
+    EDUC               3.433      0.212     16.199      0.000
+    YTDEADC            2.489      0.303      8.211      0.000
+
+ Residual Variances
+    Y1                 1.775      0.400      4.438      0.000
+    Y2                 1.775      0.400      4.438      0.000
+    Y3                 1.775      0.400      4.438      0.000
+    I                  7.875      2.677      2.941      0.003
+    S                  0.266      0.217      1.223      0.221
+
+Categorical Latent Variables
+
+ C#1        ON
+    BPAGEC            -0.018      0.473     -0.038      0.970
+    EDUC               0.107      0.097      1.102      0.271
+    YTDEADC           -0.116      0.108     -1.079      0.281
+    FEMALE             0.242      0.334      0.725      0.469
+    DEMEVER            2.413      0.498      4.846      0.000
+    SESGRP            -0.724      0.395     -1.831      0.067
+
+ Intercepts
+    C#1               -1.140      0.561     -2.032      0.042
+
+
+LOGISTIC REGRESSION ODDS RATIO RESULTS
+
+Categorical Latent Variables
+
+ C#1      ON
+    BPAGEC             0.982
+    EDUC               1.113
+    YTDEADC            0.890
+    FEMALE             1.274
+    DEMEVER           11.169
+    SESGRP             0.485
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.304E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 1
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1                 0             0             0             0             0
+ Y2                 0             0             0             0             0
+ Y3                 0             0             0             0             0
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           LAMBDA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ Y1                 0             0             0
+ Y2                 0             0             0
+ Y3                 0             0             0
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1                 1
+ Y2                 0             1
+ Y3                 0             0             1
+ BPAGEC             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           THETA
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ YTDEADC            0
+ FEMALE             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0             0
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1                  2             3             4             5             6
+
+
+           ALPHA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ 1                  0             0             0
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                  0             0             7             8             9
+ S                  0             0            13            14            15
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           BETA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ I                 10            11            12
+ S                 16            17            18
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                 19
+ S                 20            21
+ BPAGEC             0             0            22
+ EDUC               0             0            23            24
+ YTDEADC            0             0            25            26            27
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           PSI
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ FEMALE             0
+ SESGRP             0             0
+ DEMEVER            0             0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS 2
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1                 0             0             0             0             0
+ Y2                 0             0             0             0             0
+ Y3                 0             0             0             0             0
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           LAMBDA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ Y1                 0             0             0
+ Y2                 0             0             0
+ Y3                 0             0             0
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1                28
+ Y2                 0            28
+ Y3                 0             0            28
+ BPAGEC             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           THETA
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ YTDEADC            0
+ FEMALE             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0             0
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1                 29            30             4             5             6
+
+
+           ALPHA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ 1                  0             0             0
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                  0             0            31            32            33
+ S                  0             0            37            38            39
+ BPAGEC             0             0             0             0             0
+ EDUC               0             0             0             0             0
+ YTDEADC            0             0             0             0             0
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           BETA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ I                 34            35            36
+ S                 40            41            42
+ BPAGEC             0             0             0
+ EDUC               0             0             0
+ YTDEADC            0             0             0
+ FEMALE             0             0             0
+ SESGRP             0             0             0
+ DEMEVER            0             0             0
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I                 19
+ S                 20            21
+ BPAGEC             0             0            22
+ EDUC               0             0            23            24
+ YTDEADC            0             0            25            26            27
+ FEMALE             0             0             0             0             0
+ SESGRP             0             0             0             0             0
+ DEMEVER            0             0             0             0             0
+
+
+           PSI
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ FEMALE             0
+ SESGRP             0             0
+ DEMEVER            0             0             0
+
+
+     PARAMETER SPECIFICATION FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2
+              ________      ________
+ 1                 43             0
+
+
+           GAMMA(C)
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ C#1                0             0            44            45            46
+ C#2                0             0             0             0             0
+
+
+           GAMMA(C)
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ C#1               47            48            49
+ C#2                0             0             0
+
+
+     STARTING VALUES FOR LATENT CLASS 1
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1             0.000         0.000         0.000         0.000         0.000
+ Y2             0.000         0.000         0.000         0.000         0.000
+ Y3             0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         1.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         1.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         1.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ Y1             0.000         0.000         0.000
+ Y2             0.000         0.000         0.000
+ Y3             0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         1.000         0.000         0.000
+ SESGRP         0.000         1.000         0.000
+ DEMEVER        0.000         0.000         1.000
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1            17.182
+ Y2             0.000        23.281
+ Y3             0.000         0.000        30.925
+ BPAGEC         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ YTDEADC        0.000
+ FEMALE         0.000         0.000
+ SESGRP         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1             16.599        -2.608         0.461         2.858         3.241
+
+
+           ALPHA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ 1              0.000         0.000         0.000
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I              0.000         0.000         0.000         0.000         0.000
+ S              0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ I              0.000         0.000         0.000
+ S              0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I            181.087
+ S              0.000        12.669
+ BPAGEC         0.000         0.000         0.090
+ EDUC           0.000         0.000         0.000         1.719
+ YTDEADC        0.000         0.000         0.000         0.000         1.245
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ FEMALE         0.124
+ SESGRP         0.000         0.122
+ DEMEVER        0.000         0.000         0.054
+
+
+     STARTING VALUES FOR LATENT CLASS 2
+
+
+           NU
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ Y1             0.000         0.000         0.000         0.000         0.000
+ Y2             0.000         0.000         0.000         0.000         0.000
+ Y3             0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         1.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         1.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         1.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ Y1             0.000         0.000         0.000
+ Y2             0.000         0.000         0.000
+ Y3             0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         1.000         0.000         0.000
+ SESGRP         0.000         1.000         0.000
+ DEMEVER        0.000         0.000         1.000
+
+
+           THETA
+              Y1            Y2            Y3            BPAGEC        EDUC
+              ________      ________      ________      ________      ________
+ Y1            17.182
+ Y2             0.000        23.281
+ Y3             0.000         0.000        30.925
+ BPAGEC         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              YTDEADC       FEMALE        SESGRP        DEMEVER
+              ________      ________      ________      ________
+ YTDEADC        0.000
+ FEMALE         0.000         0.000
+ SESGRP         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ 1             16.599        -2.608         0.461         2.858         3.241
+
+
+           ALPHA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ 1              0.000         0.000         0.000
+
+
+           BETA
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I              0.000         0.000         0.000         0.000         0.000
+ S              0.000         0.000         0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ I              0.000         0.000         0.000
+ S              0.000         0.000         0.000
+ BPAGEC         0.000         0.000         0.000
+ EDUC           0.000         0.000         0.000
+ YTDEADC        0.000         0.000         0.000
+ FEMALE         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000
+
+
+           PSI
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ I            181.087
+ S              0.000        12.669
+ BPAGEC         0.000         0.000         0.090
+ EDUC           0.000         0.000         0.000         1.719
+ YTDEADC        0.000         0.000         0.000         0.000         1.245
+ FEMALE         0.000         0.000         0.000         0.000         0.000
+ SESGRP         0.000         0.000         0.000         0.000         0.000
+ DEMEVER        0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ FEMALE         0.124
+ SESGRP         0.000         0.122
+ DEMEVER        0.000         0.000         0.054
+
+
+     STARTING VALUES FOR LATENT CLASS REGRESSION MODEL PART
+
+
+           ALPHA(C)
+              C#1           C#2
+              ________      ________
+ 1              0.000         0.000
+
+
+           GAMMA(C)
+              I             S             BPAGEC        EDUC          YTDEADC
+              ________      ________      ________      ________      ________
+ C#1            0.000         0.000         0.000         0.000         0.000
+ C#2            0.000         0.000         0.000         0.000         0.000
+
+
+           GAMMA(C)
+              FEMALE        SESGRP        DEMEVER
+              ________      ________      ________
+ C#1            0.000         0.000         0.000
+ C#2            0.000         0.000         0.000
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ 1             19.299        -2.077        19.774        -1.946
+
+
+           Covariances
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ I            113.714
+ S             26.300         7.058
+ C_I          117.101        27.306       124.634
+ C_S           27.332         7.366        29.482         8.025
+
+
+           Correlations
+              I             S             C_I           C_S
+              ________      ________      ________      ________
+ I              1.000
+ S              0.928         1.000
+ C_I            0.984         0.921         1.000
+ C_S            0.905         0.979         0.932         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores)
+  Scatterplots (sample values, estimated factor scores)
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    newcastle-mmse-k-2.txt
+
+  Order and format of variables
+
+    Y1             F10.3
+    Y2             F10.3
+    Y3             F10.3
+    BPAGEC         F10.3
+    EDUC           F10.3
+    YTDEADC        F10.3
+    FEMALE         F10.3
+    SESGRP         F10.3
+    DEMEVER        F10.3
+    DTIMEC1        F10.3
+    DTIMEC2        F10.3
+    DTIMEC3        F10.3
+    I              F10.3
+    S              F10.3
+    C_I            F10.3
+    C_S            F10.3
+    CPROB1         F10.3
+    CPROB2         F10.3
+    C              F10.3
+
+  Save file format
+    19F10.3
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  15:07:12
+        Ending Time:  15:33:12
+       Elapsed Time:  00:26:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2014 Muthen & Muthen
