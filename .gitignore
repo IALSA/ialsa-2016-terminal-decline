@@ -64,3 +64,7 @@ sandbox/pipeline-demo-1/outputs/generic-data/data-long.rds
 sandbox/pipeline-demo-1/outputs/generic-data/data-wide.rds
 manipulation/estimation/newcastle/NewcastleTDclasses.txt
 manipulation/estimation/newcastle/NewcastleTDclassesnn.txt
+
+sandbox/basic-review/*.html
+sandbox/basic-review/figure_rmd_newcastle/*
+sandbox/basic-review/figure_rmd_octo/*
