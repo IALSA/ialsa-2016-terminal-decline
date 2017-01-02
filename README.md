@@ -18,9 +18,9 @@ The current analyses identified two independent trajectories of terminal decline
 
 Our results showed heterogeneity in terminal decline in similar age populations from two different European countries and suggest that terminal decline is not necessarily a normative process.
 </br>
-[![figure 1][fig_1_link]](fig_1_link)
+[![figure 1][fig_1_link]][fig_1_link]
 </br>
-[![figure 2][fig_2_link]](fig_2_link)
+[![figure 2][fig_2_link]][fig_2_link]
 </br>
 <!--- links -->
 [fig_1_link]:https://raw.githubusercontent.com/IALSA/ialsa-2016-terminal-decline/master/reports/combined-3/graphs/fig-1-trajectories.png
