@@ -1,0 +1,26 @@
+paramHeader,param,effect,label
+Intercepts,I,Fixed effects,Intercept
+I.ON,FEMALE,Fixed effects,Female 
+I.ON,DEMEVER,Fixed effects,Dementia
+I.ON,EDUC,Fixed effects,Education
+I.ON,YTDEADC,Fixed effects,Years to death from study entry
+I.ON,SESGRP,Fixed effects,Higher Social Class
+I.ON,BPAGEC,Fixed effects,Age at study entry
+Intercepts,S,Fixed effects,Linear slope
+S.ON,FEMALE,Fixed effects,Linear slope *Female 
+S.ON,DEMEVER,Fixed effects,Linear slope *Dementia
+S.ON,EDUC,Fixed effects,Linear slope *Education
+S.ON,YTDEADC,Fixed effects,Linear slope *Years to death from study entry
+S.ON,SESGRP,Fixed effects,Linear slope *Social class
+S.ON,BPAGEC,Fixed effects,Linear slope* age at study entry
+Intercepts,Q,Fixed effects,Quadratic slope
+Q.ON,FEMALE,Fixed effects,Quadratic slope *Female 
+Q.ON,DEMEVER,Fixed effects,Quadratic slope *Dementia
+Q.ON,EDUC,Fixed effects,Quadratic slope *Education
+Q.ON,YTDEADC,Fixed effects,Quadratic slope *Years to death from study entry 
+Q.ON,SESGRP,Fixed effects,Quadratic slope *Social class
+Q.ON,BPAGEC,Fixed effects,Quadratic slope* age at study entry
+Residual.Variances,I,Residual variances,Intercept
+Residual.Variances,S,Residual variances,Linear slope
+Residual.Variances,Q,Residual variances,Quadratic slope
+Residual.Variances,Y1,Residual variances,Error
