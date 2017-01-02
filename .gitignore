@@ -62,3 +62,5 @@ manipulation/translator-support/outputs/grip-numbercomp/long-dataset.dat
 *.gh5
 sandbox/pipeline-demo-1/outputs/generic-data/data-long.rds
 sandbox/pipeline-demo-1/outputs/generic-data/data-wide.rds
+manipulation/estimation/newcastle/NewcastleTDclasses.txt
+manipulation/estimation/newcastle/NewcastleTDclassesnn.txt
