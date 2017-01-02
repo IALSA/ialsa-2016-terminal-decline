@@ -1,0 +1,19 @@
+#TOC {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  overflow:auto;
+  line-height:200%;
+}
+
+body {
+   font-family: "Helvetica" , "sans-serif";
+   background-color: white;
+   font-size: 14px;
+      max-width: 1200px;
+      margin: auto;
+      margin-left:100px;
+      line-height: 17px;
+}
