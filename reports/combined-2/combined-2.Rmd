@@ -1,0 +1,110 @@
+---
+title: "Tables & Graphs"
+output:
+  html_document:
+    css: ~/GitHub/ialsa-2016-terminal-decline/libs/css/sidebar-simple-wide.css
+    highlight: kate
+    keep_md: yes
+    theme: flatly
+    toc: yes
+---
+
+
+<!-- These two chunks should be added in the beginning of every .Rmd that you want to source an .R script -->
+<!--  The 1st mandatory chunck  -->
+<!--  Set the working directory to the repository's base directory -->
+```{r, echo=F, message=F} 
+#Don't combine this call with any other chunk 
+# cat("Working directory: ", getwd()) # check where you are
+  library(knitr)
+# Rmd is in "./reports/reportA/reportA.Rmd", but now the root is "./"
+  knitr::opts_knit$set(root.dir='../../') 
+```
+
+<!--  The 2nd mandatory chunck  -->
+<!-- Set the report-wide options, and point to the external code file. -->
+```{r set_options, echo=F}
+# set options shared by all chunks
+opts_chunk$set(
+  results='show', 
+  message = TRUE,
+  comment = NA, 
+  tidy = FALSE,
+  fig.height = 4, 
+  fig.width = 5.5, 
+  out.width = "900px",
+  fig.path = 'figure_rmd/',     
+  dev = "png",
+  dpi = 400
+  # fig.path = 'figure_pdf/',     
+  # dev = "pdf"#,
+  # dev.args=list(pdf = list(colormodel = 'cmyk'))
+)
+echoChunks <- FALSE
+options(width=120) #So the output is 50% wider than the default.
+# connect to the file with the underlying R script  
+read_chunk("./reports/combined-2/combined-2.R") 
+```
+
+This report displays the results for two Growth Curve Mixture models with two latent classes from OCTO-Twin and Newcastle 85+ studies,
+
+
+<!-- Load 'sourced' R files.  Suppress the output when loading packages. --> 
+```{r load-packages, echo=echoChunks, message=FALSE}
+```
+
+
+<!-- Load the sources.  Suppress the output when loading sources. --> 
+```{r load-sources, echo=echoChunks, message=FALSE}
+```
+
+
+<!-- Load any Global functions and variables declared in the R file.  Suppress the output. --> 
+```{r declare-globals, echo=echoChunks, results=echoChunks, message=FALSE}
+```
+
+<!-- Declare any global functions specific to a Rmd output.  Suppress the output. --> 
+```{r, echo=echoChunks, message=FALSE}
+#Put code in here.  It doesn't call a chunk in the codebehind file.
+```
+
+<!-- Load the datasets.   -->
+```{r load-data, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r populate-list-object, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r assemble-table, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r prepare-data-newcastle, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r prepare-data-octo, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r data-average-trajectories, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+```{r define-graphical-settings, echo=echoChunks, results='hide', message=FALSE, warning=FALSE}
+```
+
+<!-- print results   -->
+#Table of Results
+
+```{r print-table, echo=echoChunks, results='show', message=FALSE, warning=FALSE}
+```
+
+#Figure 1
+
+```{r print-fig-1, echo=echoChunks, results='show', message=FALSE, fig.width=8, fig.height=4,dpi=400, out.width="800px", message=FALSE, warning=FALSE}
+```
+
+```{r print-fig-1-grouped, echo=echoChunks, results='asis', message=FALSE,fig.width=10.6,fig.height=4,dpi=600,out.width="800px", message=FALSE, warning=FALSE}
+```
+
+#Figure 2
+
+```{r print-fig-2, echo=echoChunks, results='show', message=FALSE,fig.width=6,fig.height=4,dpi=400,out.width="600px", message=FALSE, warning=FALSE}
+```
